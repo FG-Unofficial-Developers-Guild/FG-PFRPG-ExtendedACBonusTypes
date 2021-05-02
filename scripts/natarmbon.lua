@@ -243,11 +243,11 @@ function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		if bTouch then
 			table.insert(aIgnoreEffects, "armor");
 			--table.insert(aIgnoreEffects, "armorsize");
-			table.insert(aIgnoreEffects, "armorenhancement");
 			table.insert(aIgnoreEffects, "shield");
-			table.insert(aIgnoreEffects, "shieldenhancement");
 			table.insert(aIgnoreEffects, "natural");
 			table.insert(aIgnoreEffects, "naturalsize");
+			table.insert(aIgnoreEffects, "armorenhancement");
+			table.insert(aIgnoreEffects, "shieldenhancement");
 			table.insert(aIgnoreEffects, "naturalenhancement");
 		end
 		if bFlatFooted or bCombatAdvantage then
@@ -419,16 +419,14 @@ function onInit()
 	ActorManager35E.getDefenseValue = getDefenseValue_new;
 	
 	--DataCommon.actypes["armorsize"] = "armorsize"
+	DataCommon.actypes["naturalsize"] = "naturalsize"
 	DataCommon.actypes["armorenhancement"] = "armorenhancement"
 	DataCommon.actypes["shieldenhancement"] = "shieldenhancement"
-	DataCommon.actypes["naturalsize"] = "naturalsize"
-	DataCommon.actypes["naturalenhancement"] = "naturalenhancement"
 	DataCommon.actypes["naturalenhancement"] = "naturalenhancement"
 
 	--table.insert(DataCommon.bonustypes, "armorsize")
+	table.insert(DataCommon.bonustypes, "naturalsize")
 	table.insert(DataCommon.bonustypes, "armorenhancement")
 	table.insert(DataCommon.bonustypes, "shieldenhancement")
-	table.insert(DataCommon.bonustypes, "naturalsize")
-	table.insert(DataCommon.bonustypes, "naturalenhancement")
 	table.insert(DataCommon.bonustypes, "naturalenhancement")
 end
