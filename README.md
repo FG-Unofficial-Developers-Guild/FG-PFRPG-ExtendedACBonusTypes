@@ -1,0 +1,2 @@
+# FG-PFRPG-NaturalArmorBonusTypes
+ 
