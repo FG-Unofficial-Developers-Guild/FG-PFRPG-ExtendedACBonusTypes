@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<!-- Please see the LICENSE.md file included with this distribution for attribution and copyright information. -->
+
+<root version='3.3' release='3'>
+	<properties>
+		<name>Natural Armor Bonus Types</name>
+		<version>1.1</version>
+		<author>bmos (Wil Thieme)</author>
+		<ruleset>
+			<name>PFRPG</name>
+		</ruleset>
+	</properties>
+
+	<base>
+		<!-- Scripts -->
+		<script name="NatArmBon" file="scripts/natarmbon.lua" />
+	</base>
+</root>
