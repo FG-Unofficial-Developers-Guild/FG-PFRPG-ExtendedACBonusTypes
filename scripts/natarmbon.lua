@@ -85,7 +85,7 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			if sFlatFootedAC then
 				nFlatFootedMod = nDefense - tonumber(sFlatFootedAC);
 			else
-				nFlatFootedMod = getAbilityBonus(rDefender, sDefenseStat);
+				nFlatFootedMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 			end
 			
 			local sTouchAC = string.match(sAC, "touch (%d+)");
@@ -108,12 +108,12 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			if sFlatFootedAC then
 				nFlatFootedMod = nAC - tonumber(sFlatFootedAC);
 			else
-				nFlatFootedMod = getAbilityBonus(rDefender, sDefenseStat);
+				nFlatFootedMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 			end
 		end
 	end
 
-	nDefenseStatMod = getAbilityBonus(rDefender, sDefenseStat) + getAbilityBonus(rDefender, sDefenseStat2);
+	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
 	
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then
@@ -245,7 +245,7 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		end
 		
 		-- DETERMINE EXISTING AC MODIFIER TYPES
-		local aExistingBonusByType = getArmorComps (rDefender);
+		local aExistingBonusByType = ActorManager35E.getArmorComps(rDefender);
 		
 		-- GET DEFENDER ALL DEFENSE MODIFIERS
 		local aIgnoreEffects = {};
@@ -334,10 +334,10 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		-- GET DEFENDER DEFENSE STAT MODIFIERS
 		local nBonusStat = 0;
 		-- Kel Also here tags, everywhere :D
-		local nBonusStat1 = getAbilityEffectsBonus(rDefender, sDefenseStat, rRoll.tags);
+		local nBonusStat1 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat, rRoll.tags);
 		if (sDefenderNodeType == "pc") and (nBonusStat1 > 0) then
 			if DB.getValue(nodeDefender, "encumbrance.armormaxstatbonusactive", 0) == 1 then
-				local nCurrentStatBonus = getAbilityBonus(rDefender, sDefenseStat);
+				local nCurrentStatBonus = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 				local nMaxStatBonus = math.max(DB.getValue(nodeDefender, "encumbrance.armormaxstatbonus", 0), 0);
 				local nMaxEffectStatModBonus = math.max(nMaxStatBonus - nCurrentStatBonus, 0);
 				if nBonusStat1 > nMaxEffectStatModBonus then 
@@ -349,12 +349,12 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			nFlatFootedMod = nFlatFootedMod + nBonusStat1;
 		end
 		nBonusStat = nBonusStat + nBonusStat1;
-		local nBonusStat2 = getAbilityEffectsBonus(rDefender, sDefenseStat2, rRoll.tags);
+		local nBonusStat2 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat2, rRoll.tags);
 		if not bFlatFooted and not bCombatAdvantage and sDefenseStat2 == "dexterity" then
 			nFlatFootedMod = nFlatFootedMod + nBonusStat2;
 		end
 		nBonusStat = nBonusStat + nBonusStat2;
-		local nBonusStat3 = getAbilityEffectsBonus(rDefender, sDefenseStat3, rRoll.tags);
+		local nBonusStat3 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat3, rRoll.tags);
 		if not bFlatFooted and not bCombatAdvantage and sDefenseStat3 == "dexterity" then
 			nFlatFootedMod = nFlatFootedMod + nBonusStat3;
 		end
