@@ -880,11 +880,20 @@ function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	return nDefense, 0, nDefenseEffectMod, nMissChance;
 end
 
+function usingKelrugemFOP()
+	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons"));
+end
 
 -- Function Overrides
 function onInit()
-	ActorManager35E.getDefenseValue = getDefenseValue_new;
-	
+	if usingKelrugemFOP() then
+		ActorManager35E.getDefenseValue = getDefenseValue_kel;
+	else
+		ActorManager35E.getDefenseValue = getDefenseValue_new;
+	end
+
 	--DataCommon.actypes["armorsize"] = "armorsize"
 	DataCommon.actypes["naturalsize"] = "naturalsize"
 	DataCommon.actypes["armorenhancement"] = "armorenhancement"
