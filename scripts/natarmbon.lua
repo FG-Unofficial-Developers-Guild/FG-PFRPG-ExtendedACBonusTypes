@@ -2,7 +2,7 @@
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-function getDefenseValue_kel(rAttacker, rDefender, rRoll)
+local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	-- VALIDATE
 	if not rDefender or not rRoll then
 		return nil, 0, 0, 0;
@@ -469,7 +469,7 @@ function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	return nDefense, 0, nDefenseEffectMod, nMissChance, nAdditionalDefenseForCC;
 end
 
-function getDefenseValue_new(rAttacker, rDefender, rRoll)
+local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	-- VALIDATE
 	if not rDefender or not rRoll then
 		return nil, 0, 0, 0;
@@ -880,7 +880,7 @@ function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	return nDefense, 0, nDefenseEffectMod, nMissChance;
 end
 
-function usingKelrugemFOP()
+local function usingKelrugemFOP()
 	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
 			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
 			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons"));
