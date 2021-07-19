@@ -4,7 +4,7 @@
 
 <root version='3.3' release='3'>
 	<properties>
-		<name>Extended AC Bonus Types</name>
+		<name>Feature: Extended AC Bonus Types</name>
 		<version>1.2</version>
 		<author>bmos (Wil Thieme)</author>
 		<ruleset>
