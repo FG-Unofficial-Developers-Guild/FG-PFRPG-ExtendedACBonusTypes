@@ -25,6 +25,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	-- if string.match(sAttack, "%[INCORPOREAL%]") then
 		-- bIncorporealAttack = true;
 	-- end
+	-- KEL check for uncanny dodge here not needed, but maybe a security check?
 	local bFlatFooted = string.match(sAttack, "%[FF%]");
 	local nCover = tonumber(string.match(sAttack, "%[COVER %-(%d)%]")) or 0;
 	local bConceal = string.match(sAttack, "%[CONCEAL%]");
@@ -165,16 +166,27 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		end
 		
 		-- GET DEFENDER SITUATIONAL MODIFIERS - GENERAL
+		-- KEL adding uncanny dodge, blind-fight and ethereal; also improving performance a little bit
+		if EffectManager35E.hasEffect(rAttacker, "Ethereal", rDefender, true, false, rRoll.tags) then
+			nBonusSituational = nBonusSituational - 2;
+			if not ActorManager35E.hasSpecialAbility(rDefender, "Uncanny Dodge", false, false, true) then
+				bCombatAdvantage = true;
+			end
+		elseif EffectManager35E.hasEffect(rAttacker, "Invisible", rDefender, true, false, rRoll.tags) then
+			local bBlindFight = ActorManager35E.hasSpecialAbility(rDefender, "Blind-Fight", true, false, false);
+			if sAttackType == "R" or not bBlindFight then
+				nBonusSituational = nBonusSituational - 2;
+				if not ActorManager35E.hasSpecialAbility(rDefender, "Uncanny Dodge", false, false, true) then
+					bCombatAdvantage = true;
+				end
+			end
+		end
 		if EffectManager35E.hasEffect(rAttacker, "CA", rDefender, true, false, rRoll.tags) then
 			bCombatAdvantage = true;
-		end
-		if EffectManager35E.hasEffect(rAttacker, "Invisible", rDefender, true, false, rRoll.tags) then
-			nBonusSituational = nBonusSituational - 2;
+		elseif EffectManager35E.hasEffect(rDefender, "GRANTCA", rAttacker, false, false, rRoll.tags) then
 			bCombatAdvantage = true;
 		end
-		if EffectManager35E.hasEffect(rDefender, "GRANTCA", rAttacker, false, false, rRoll.tags) then
-			bCombatAdvantage = true;
-		end
+		-- END
 		if EffectManager35E.hasEffect(rDefender, "Blinded", nil, false, false, rRoll.tags) then
 			nBonusSituational = nBonusSituational - 2;
 			bCombatAdvantage = true;
@@ -187,8 +199,10 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		if EffectManager35E.hasEffect(rDefender, "Slowed", nil, false, false, rRoll.tags) then
 			nBonusSituational = nBonusSituational - 1;
 		end
-		if EffectManager35E.hasEffect(rDefender, "Flat-footed", nil, false, false, rRoll.tags) or 
-				EffectManager35E.hasEffect(rDefender, "Flatfooted", nil, false, false, rRoll.tags) or 
+		-- KEL adding uncanny dodge
+		if ( ( EffectManager35E.hasEffect(rDefender, "Flat-footed", nil, false, false, rRoll.tags) or 
+				EffectManager35E.hasEffect(rDefender, "Flatfooted", nil, false, false, rRoll.tags) ) and not
+				ActorManager35E.hasSpecialAbility(rDefender, "Uncanny Dodge", false, false, true) ) or 
 				EffectManager35E.hasEffect(rDefender, "Climbing", nil, false, false, rRoll.tags) or 
 				EffectManager35E.hasEffect(rDefender, "Running", nil, false, false, rRoll.tags) then
 			bCombatAdvantage = true;
@@ -240,10 +254,11 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			end
 			bCombatAdvantage = true;
 		end
-		if EffectManager35E.hasEffect(rDefender, "Invisible", rAttacker, false, false, rRoll.tags) then
+		-- KEL Ethereal
+		if EffectManager35E.hasEffect(rDefender, "Invisible", rAttacker, false, false, rRoll.tags) or EffectManager35E.hasEffect(rDefender, "Ethereal", rAttacker, false, false, rRoll.tags) then
 			bTotalConceal = true;
 		end
-		
+		-- END
 		-- DETERMINE EXISTING AC MODIFIER TYPES
 		local aExistingBonusByType = ActorManager35E.getArmorComps(rDefender);
 		
@@ -709,7 +724,6 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		local aIgnoreEffects = {};
 		if bTouch then
 			table.insert(aIgnoreEffects, "armor");
-											   
 			table.insert(aIgnoreEffects, "shield");
 			table.insert(aIgnoreEffects, "natural");
 			table.insert(aIgnoreEffects, "naturalsize");
