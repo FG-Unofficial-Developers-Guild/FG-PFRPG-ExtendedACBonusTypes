@@ -3,7 +3,7 @@
 Some abilities in Pathfinder say they provide "a size bonus to natural armor" and complex things like this.](https://www.fantasygrounds.com/forums/showthread.php?58962-PFRPG-Spellbook&p=597195&viewfull=1#post597195)
 
 # Compatibility
-This extension has been tested with [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.1.4 (2021-06-08).
+This extension has been tested with [FantasyGrounds Unity](https://www.fantasygrounds.com/home/FantasyGroundsUnity.php) 4.1.13 (2022-01-05).
 
 # Features
 This extension adds the bonus types:
