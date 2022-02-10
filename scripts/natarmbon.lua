@@ -897,7 +897,9 @@ end
 local function usingKelrugemFOP()
 	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
 			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons"));
+			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons") or
+			StringManager.contains(Extension.getExtensions(), "StrainInjury with Full OverlayPackage") or
+			StringManager.contains(Extension.getExtensions(), "StrainInjury with Full OverlayPackage with new icons"));
 end
 
 -- Function Overrides
