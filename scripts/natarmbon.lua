@@ -894,17 +894,9 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	return nDefense, 0, nDefenseEffectMod, nMissChance;
 end
 
-local function usingKelrugemFOP()
-	return (StringManager.contains(Extension.getExtensions(), "Full OverlayPackage") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with alternative icons") or
-			StringManager.contains(Extension.getExtensions(), "Full OverlayPackage with other icons") or
-			StringManager.contains(Extension.getExtensions(), "StrainInjury with Full OverlayPackage") or
-			StringManager.contains(Extension.getExtensions(), "StrainInjury with Full OverlayPackage with new icons"));
-end
-
 -- Function Overrides
 function onInit()
-	if usingKelrugemFOP() then
+	if CombatManagerKel then
 		ActorManager35E.getDefenseValue = getDefenseValue_kel;
 	else
 		ActorManager35E.getDefenseValue = getDefenseValue_new;
