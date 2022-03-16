@@ -1,4 +1,6 @@
-# PFRPG Extended AC Bonus Types
+[![Build FG-Usable File](https://github.com/FG-Unofficial-Developers-Guild/FG-PFRPG-ExtendedACBonusTypes/actions/workflows/create-ext.yml/badge.svg)](https://github.com/FG-Unofficial-Developers-Guild/FG-PFRPG-ExtendedACBonusTypes/actions/workflows/create-ext.yml) [![Luacheck](https://github.com/FG-Unofficial-Developers-Guild/FG-PFRPG-ExtendedACBonusTypes/actions/workflows/luacheck.yml/badge.svg)](https://github.com/FG-Unofficial-Developers-Guild/FG-PFRPG-ExtendedACBonusTypes/actions/workflows/luacheck.yml)
+
+# Extended AC Bonus Types
 [Natural and armor AC bonuses have some sub-bonuses that stack with each other.
 Some abilities in Pathfinder say they provide "a size bonus to natural armor" and complex things like this.](https://www.fantasygrounds.com/forums/showthread.php?58962-PFRPG-Spellbook&p=597195&viewfull=1#post597195)
 
