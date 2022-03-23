@@ -1,15 +1,15 @@
--- 
+--
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
 
-local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
+local function getDefenseValue_kel(rAttacker, rDefender, rRoll) --luacheck: ignore
 	-- VALIDATE
 	if not rDefender or not rRoll then
 		return nil, 0, 0, 0;
 	end
-	
+
 	local sAttack = rRoll.sDesc;
-	
+
 	-- DETERMINE ATTACK TYPE AND DEFENSE
 	local sAttackType = "M";
 	if rRoll.sType == "attack" then
@@ -88,7 +88,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			else
 				nFlatFootedMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 			end
-			
+
 			local sTouchAC = string.match(sAC, "touch (%d+)");
 			if sTouchAC then
 				nTouchMod = nDefense - tonumber(sTouchAC);
@@ -101,7 +101,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			else
 				nDefense = 10;
 			end
-			
+
 			local sAC = DB.getValue(nodeDefender, "ac", "");
 			local nAC = tonumber(string.match(sAC, "^%s*(%d+)")) or 10;
 
@@ -115,7 +115,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	end
 
 	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
-	
+
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then
 		nTouchMod = 0;
@@ -123,7 +123,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	if nFlatFootedMod < 0 then
 		nFlatFootedMod = 0;
 	end
-	
+
 	-- APPLY FLAT-FOOTED AND TOUCH ADJUSTMENTS
 	if bTouch then
 		nDefense = nDefense - nTouchMod;
@@ -131,7 +131,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 	if bFlatFooted then
 		nDefense = nDefense - nFlatFootedMod;
 	end
-	
+
 	-- EFFECT MODIFIERS
 	local nDefenseEffectMod = 0;
 	-- KEL ACCC stuff
@@ -146,10 +146,10 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		local nBonusACCC = 0;
 		local nBonusStat = 0;
 		local nBonusSituational = 0;
-		
+
 		local bPFMode = DataCommon.isPFRPG();
-		
-		-- BUILD ATTACK FILTER 
+
+		-- BUILD ATTACK FILTER
 		local aAttackFilter = {};
 		if sAttackType == "M" then
 			table.insert(aAttackFilter, "melee");
@@ -159,12 +159,12 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		if bOpportunity then
 			table.insert(aAttackFilter, "opportunity");
 		end
-					
+
 		-- CHECK IF COMBAT ADVANTAGE ALREADY SET BY ATTACKER EFFECT
 		if sAttack:match("%[CA%]") then
 			bCombatAdvantage = true;
 		end
-		
+
 		-- GET DEFENDER SITUATIONAL MODIFIERS - GENERAL
 		-- KEL adding uncanny dodge, blind-fight and ethereal; also improving performance a little bit
 		if EffectManager35E.hasEffect(rAttacker, "Ethereal", rDefender, true, false, rRoll.tags) then
@@ -200,10 +200,10 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			nBonusSituational = nBonusSituational - 1;
 		end
 		-- KEL adding uncanny dodge
-		if ( ( EffectManager35E.hasEffect(rDefender, "Flat-footed", nil, false, false, rRoll.tags) or 
+		if ( ( EffectManager35E.hasEffect(rDefender, "Flat-footed", nil, false, false, rRoll.tags) or
 				EffectManager35E.hasEffect(rDefender, "Flatfooted", nil, false, false, rRoll.tags) ) and not
-				ActorManager35E.hasSpecialAbility(rDefender, "Uncanny Dodge", false, false, true) ) or 
-				EffectManager35E.hasEffect(rDefender, "Climbing", nil, false, false, rRoll.tags) or 
+				ActorManager35E.hasSpecialAbility(rDefender, "Uncanny Dodge", false, false, true) ) or
+				EffectManager35E.hasEffect(rDefender, "Climbing", nil, false, false, rRoll.tags) or
 				EffectManager35E.hasEffect(rDefender, "Running", nil, false, false, rRoll.tags) then
 			bCombatAdvantage = true;
 		end
@@ -221,8 +221,8 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				bCombatAdvantage = true;
 			end
 		end
-		if EffectManager35E.hasEffect(rDefender, "Helpless", nil, false, false, rRoll.tags) or 
-				EffectManager35E.hasEffect(rDefender, "Paralyzed", nil, false, false, rRoll.tags) or 
+		if EffectManager35E.hasEffect(rDefender, "Helpless", nil, false, false, rRoll.tags) or
+				EffectManager35E.hasEffect(rDefender, "Paralyzed", nil, false, false, rRoll.tags) or
 				EffectManager35E.hasEffect(rDefender, "Petrified", nil, false, false, rRoll.tags) or
 				EffectManager35E.hasEffect(rDefender, "Unconscious", nil, false, false, rRoll.tags) then
 			if sAttackType == "M" then
@@ -230,7 +230,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			end
 			bZeroAbility = true;
 		end
-		if EffectManager35E.hasEffect(rDefender, "Kneeling", nil, false, false, rRoll.tags) or 
+		if EffectManager35E.hasEffect(rDefender, "Kneeling", nil, false, false, rRoll.tags) or
 				EffectManager35E.hasEffect(rDefender, "Sitting", nil, false, false, rRoll.tags) then
 			if sAttackType == "M" then
 				nBonusSituational = nBonusSituational - 2;
@@ -261,7 +261,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 		-- END
 		-- DETERMINE EXISTING AC MODIFIER TYPES
 		local aExistingBonusByType = ActorManager35E.getArmorComps(rDefender);
-		
+
 		-- GET DEFENDER ALL DEFENSE MODIFIERS
 		local aIgnoreEffects = {};
 		if bTouch then
@@ -345,7 +345,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				nBonusAC = nBonusAC + nPFMod;
 			end
 		end
-		
+
 		-- GET DEFENDER DEFENSE STAT MODIFIERS
 		local nBonusStat = 0;
 		-- Kel Also here tags, everywhere :D
@@ -355,8 +355,8 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				local nCurrentStatBonus = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 				local nMaxStatBonus = math.max(DB.getValue(nodeDefender, "encumbrance.armormaxstatbonus", 0), 0);
 				local nMaxEffectStatModBonus = math.max(nMaxStatBonus - nCurrentStatBonus, 0);
-				if nBonusStat1 > nMaxEffectStatModBonus then 
-					nBonusStat1 = nMaxEffectStatModBonus; 
+				if nBonusStat1 > nMaxEffectStatModBonus then
+					nBonusStat1 = nMaxEffectStatModBonus;
 				end
 			end
 		end
@@ -380,7 +380,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				if nDefenseStatMod > 0 then
 					nBonusStat = math.min(nDefenseStatMod + nBonusStat, 0);
 				end
-				
+
 			-- IF POSITIVE AND AC STAT PENALTIES, THEN ONLY APPLY UP TO AC STAT PENALTIES
 			else
 				if nDefenseStatMod < 0 then
@@ -390,7 +390,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				end
 			end
 		end
-		
+
 		-- HANDLE NEGATIVE LEVELS
 		if rRoll.sType == "grapple" then
 			local nNegLevelMod, nNegLevelCount = EffectManager35E.getEffectsBonus(rDefender, {"NLVL"}, true, nil, nil, false, rRoll.tags);
@@ -398,7 +398,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				nBonusSituational = nBonusSituational - nNegLevelMod;
 			end
 		end
-		
+
 		-- HANDLE DEXTERITY MODIFIER REMOVAL
 		if bZeroAbility then
 			if bFlatFooted then
@@ -427,11 +427,11 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				end
 			end
 		end
-		
+
 		-- GET DEFENDER SITUATIONAL MODIFIERS - CONCEALMENT
 		-- KEL Variable concealment; do not use getEffectsBonus because we do not want that untyped boni are stacking
 		local aVConcealEffect, aVConcealCount = EffectManager35E.getEffectsBonusByType(rDefender, "VCONC", true, aAttackFilter, rAttacker, false, rRoll.tags);
-		
+
 		if aVConcealCount > 0 then
 			for _,v in  pairs(aVConcealEffect) do
 				nMissChance = math.max(v.mod,nMissChance);
@@ -449,7 +449,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				end
 			end
 		end
-		
+
 		-- CHECK INCORPOREALITY
 		if not bPFMode and (nMissChance < 50) then
 			local bIncorporealDefender = EffectManager35E.hasEffect(rDefender, "Incorporeal", rAttacker, false, false, rRoll.tags);
@@ -459,12 +459,12 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 				nMissChance = 50;
 			end
 		end
-		
+
 		-- ADD IN EFFECT MODIFIERS
 		nDefenseEffectMod = nBonusAC + nBonusStat + nBonusSituational;
 		-- KEL ACCC
 		nAdditionalDefenseForCC = nBonusACCC;
-	
+
 	-- NO DEFENDER SPECIFIED, SO JUST LOOK AT THE ATTACK ROLL MODIFIERS, here no math.max needed but to be sure...
 	else
 		if bTotalConceal or bAttackerBlinded then
@@ -478,7 +478,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll)
 			nMissChance = math.max(50,nMissChance);
 		end
 	end
-	
+
 	-- Return the final defense value
 	-- KEL ACCC output
 	return nDefense, 0, nDefenseEffectMod, nMissChance, nAdditionalDefenseForCC;
@@ -489,9 +489,9 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	if not rDefender or not rRoll then
 		return nil, 0, 0, 0;
 	end
-	
+
 	local sAttack = rRoll.sDesc;
-	
+
 	-- DETERMINE ATTACK TYPE AND DEFENSE
 	local sAttackType = "M";
 	if rRoll.sType == "attack" then
@@ -564,7 +564,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 			else
 				nFlatFootedMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 			end
-			
+
 			local sTouchAC = string.match(sAC, "touch (%d+)");
 			if sTouchAC then
 				nTouchMod = nDefense - tonumber(sTouchAC);
@@ -577,7 +577,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 			else
 				nDefense = 10;
 			end
-			
+
 			local sAC = DB.getValue(nodeDefender, "ac", "");
 			local nAC = tonumber(string.match(sAC, "^%s*(%d+)")) or 10;
 
@@ -591,7 +591,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	end
 
 	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
-	
+
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then
 		nTouchMod = 0;
@@ -599,7 +599,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	if nFlatFootedMod < 0 then
 		nFlatFootedMod = 0;
 	end
-	
+
 	-- APPLY FLAT-FOOTED AND TOUCH ADJUSTMENTS
 	if bTouch then
 		nDefense = nDefense - nTouchMod;
@@ -607,7 +607,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	if bFlatFooted then
 		nDefense = nDefense - nFlatFootedMod;
 	end
-	
+
 	-- EFFECT MODIFIERS
 	local nDefenseEffectMod = 0;
 	local nMissChance = 0;
@@ -618,10 +618,10 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		local nBonusAC = 0;
 		local nBonusStat = 0;
 		local nBonusSituational = 0;
-		
+
 		local bPFMode = DataCommon.isPFRPG();
-		
-		-- BUILD ATTACK FILTER 
+
+		-- BUILD ATTACK FILTER
 		local aAttackFilter = {};
 		if sAttackType == "M" then
 			table.insert(aAttackFilter, "melee");
@@ -636,7 +636,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		if sAttack:match("%[CA%]") then
 			bCombatAdvantage = true;
 		end
-		
+
 		-- GET DEFENDER SITUATIONAL MODIFIERS - GENERAL
 		if EffectManager35E.hasEffect(rAttacker, "CA", rDefender, true) then
 			bCombatAdvantage = true;
@@ -660,9 +660,9 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		if EffectManager35E.hasEffect(rDefender, "Slowed") then
 			nBonusSituational = nBonusSituational - 1;
 		end
-		if EffectManager35E.hasEffect(rDefender, "Flat-footed") or 
-				EffectManager35E.hasEffect(rDefender, "Flatfooted") or 
-				EffectManager35E.hasEffect(rDefender, "Climbing") or 
+		if EffectManager35E.hasEffect(rDefender, "Flat-footed") or
+				EffectManager35E.hasEffect(rDefender, "Flatfooted") or
+				EffectManager35E.hasEffect(rDefender, "Climbing") or
 				EffectManager35E.hasEffect(rDefender, "Running") then
 			bCombatAdvantage = true;
 		end
@@ -680,8 +680,8 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				bCombatAdvantage = true;
 			end
 		end
-		if EffectManager35E.hasEffect(rDefender, "Helpless") or 
-				EffectManager35E.hasEffect(rDefender, "Paralyzed") or 
+		if EffectManager35E.hasEffect(rDefender, "Helpless") or
+				EffectManager35E.hasEffect(rDefender, "Paralyzed") or
 				EffectManager35E.hasEffect(rDefender, "Petrified") or
 				EffectManager35E.hasEffect(rDefender, "Unconscious") then
 			if sAttackType == "M" then
@@ -689,7 +689,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 			end
 			bZeroAbility = true;
 		end
-		if EffectManager35E.hasEffect(rDefender, "Kneeling") or 
+		if EffectManager35E.hasEffect(rDefender, "Kneeling") or
 				EffectManager35E.hasEffect(rDefender, "Sitting") then
 			if sAttackType == "M" then
 				nBonusSituational = nBonusSituational - 2;
@@ -716,10 +716,10 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		if EffectManager35E.hasEffect(rDefender, "Invisible", rAttacker) then
 			bTotalConceal = true;
 		end
-		
+
 		-- DETERMINE EXISTING AC MODIFIER TYPES
 		local aExistingBonusByType = ActorManager35E.getArmorComps (rDefender);
-		
+
 		-- GET DEFENDER ALL DEFENSE MODIFIERS
 		local aIgnoreEffects = {};
 		if bTouch then
@@ -768,7 +768,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				nBonusAC = nBonusAC + nPFMod;
 			end
 		end
-		
+
 		-- GET DEFENDER DEFENSE STAT MODIFIERS
 		local nBonusStat = 0;
 		local nBonusStat1 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat);
@@ -777,8 +777,8 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				local nCurrentStatBonus = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat);
 				local nMaxStatBonus = math.max(DB.getValue(nodeDefender, "encumbrance.armormaxstatbonus", 0), 0);
 				local nMaxEffectStatModBonus = math.max(nMaxStatBonus - nCurrentStatBonus, 0);
-				if nBonusStat1 > nMaxEffectStatModBonus then 
-					nBonusStat1 = nMaxEffectStatModBonus; 
+				if nBonusStat1 > nMaxEffectStatModBonus then
+					nBonusStat1 = nMaxEffectStatModBonus;
 				end
 			end
 		end
@@ -802,7 +802,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				if nDefenseStatMod > 0 then
 					nBonusStat = math.min(nDefenseStatMod + nBonusStat, 0);
 				end
-				
+
 			-- IF POSITIVE AND AC STAT PENALTIES, THEN ONLY APPLY UP TO AC STAT PENALTIES
 			else
 				if nDefenseStatMod < 0 then
@@ -812,7 +812,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				end
 			end
 		end
-		
+
 		-- HANDLE NEGATIVE LEVELS
 		if rRoll.sType == "grapple" then
 			local nNegLevelMod, nNegLevelCount = EffectManager35E.getEffectsBonus(rDefender, {"NLVL"}, true);
@@ -820,7 +820,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				nBonusSituational = nBonusSituational - nNegLevelMod;
 			end
 		end
-		
+
 		-- HANDLE DEXTERITY MODIFIER REMOVAL
 		if bZeroAbility then
 			if bFlatFooted then
@@ -849,7 +849,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				end
 			end
 		end
-		
+
 		-- GET DEFENDER SITUATIONAL MODIFIERS - CONCEALMENT
 		local aConceal = EffectManager35E.getEffectsByType(rDefender, "TCONC", aAttackFilter, rAttacker);
 		if #aConceal > 0 or EffectManager35E.hasEffect(rDefender, "TCONC", rAttacker) or bTotalConceal or bAttackerBlinded then
@@ -860,7 +860,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				nMissChance = 20;
 			end
 		end
-		
+
 		-- CHECK INCORPOREALITY
 		if not bPFMode then
 			local bIncorporealAttack = false;
@@ -873,10 +873,10 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 				nMissChance = 50;
 			end
 		end
-		
+
 		-- ADD IN EFFECT MODIFIERS
 		nDefenseEffectMod = nBonusAC + nBonusStat + nBonusSituational;
-	
+
 	-- NO DEFENDER SPECIFIED, SO JUST LOOK AT THE ATTACK ROLL MODIFIERS
 	else
 		if bTotalConceal or bAttackerBlinded then
@@ -884,12 +884,12 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		elseif bConceal then
 			nMissChance = 20;
 		end
-		
+
 		if bIncorporealAttack then
 			nMissChance = 50;
 		end
 	end
-	
+
 	-- Return the final defense value
 	return nDefense, 0, nDefenseEffectMod, nMissChance;
 end
