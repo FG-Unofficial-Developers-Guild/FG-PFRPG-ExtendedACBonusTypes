@@ -97,8 +97,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		end
 	end
 
-	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) +
-					                  ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
+	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
 
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then nTouchMod = 0; end
@@ -164,9 +163,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 			nBonusSituational = nBonusSituational - 2;
 			bCombatAdvantage = true;
 		end
-		if EffectManager35E.hasEffect(rDefender, 'Slowed', nil, false, false, rRoll.tags) then
-			nBonusSituational = nBonusSituational - 1;
-		end
+		if EffectManager35E.hasEffect(rDefender, 'Slowed', nil, false, false, rRoll.tags) then nBonusSituational = nBonusSituational - 1; end
 		-- KEL adding uncanny dodge
 		if ((EffectManager35E.hasEffect(rDefender, 'Flat-footed', nil, false, false, rRoll.tags) or
 						EffectManager35E.hasEffect(rDefender, 'Flatfooted', nil, false, false, rRoll.tags)) and
@@ -206,9 +203,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 				nBonusSituational = nBonusSituational + 4;
 			end
 		end
-		if EffectManager35E.hasEffect(rDefender, 'Squeezing', nil, false, false, rRoll.tags) then
-			nBonusSituational = nBonusSituational - 4;
-		end
+		if EffectManager35E.hasEffect(rDefender, 'Squeezing', nil, false, false, rRoll.tags) then nBonusSituational = nBonusSituational - 4; end
 		if EffectManager35E.hasEffect(rDefender, 'Stunned', nil, false, false, rRoll.tags) then
 			nBonusSituational = nBonusSituational - 2;
 			if rRoll.sType == 'grapple' then nBonusSituational = nBonusSituational - 4; end
@@ -234,8 +229,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		end
 		if bFlatFooted or bCombatAdvantage then table.insert(aIgnoreEffects, 'dodge'); end
 		if rRoll.sType == 'grapple' then table.insert(aIgnoreEffects, 'size'); end
-		local aACEffects =
-						EffectManager35E.getEffectsBonusByType(rDefender, { 'AC' }, true, aAttackFilter, rAttacker, false, rRoll.tags);
+		local aACEffects = EffectManager35E.getEffectsBonusByType(rDefender, { 'AC' }, true, aAttackFilter, rAttacker, false, rRoll.tags);
 		for k, v in pairs(aACEffects) do
 			if not StringManager.contains(aIgnoreEffects, k) then
 				local sBonusType = DataCommon.actypes[k];
@@ -267,9 +261,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 			end
 		end
 		-- KEL rmilmine ACCC requested, beware stacking stuff
-		local aACCCEffects = EffectManager35E.getEffectsBonusByType(
-						                     rDefender, { 'ACCC' }, true, aAttackFilter, rAttacker, false, rRoll.tags
-		                     );
+		local aACCCEffects = EffectManager35E.getEffectsBonusByType(rDefender, { 'ACCC' }, true, aAttackFilter, rAttacker, false, rRoll.tags);
 		for k, v in pairs(aACCCEffects) do
 			if not StringManager.contains(aIgnoreEffects, k) then
 				local sBonusType = DataCommon.actypes[k];
@@ -298,9 +290,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		end
 		-- END
 		if rRoll.sType == 'grapple' then
-			local nPFMod, nPFCount = EffectManager35E.getEffectsBonus(
-							                         rDefender, { 'CMD' }, true, aAttackFilter, rAttacker, false, rRoll.tags
-			                         );
+			local nPFMod, nPFCount = EffectManager35E.getEffectsBonus(rDefender, { 'CMD' }, true, aAttackFilter, rAttacker, false, rRoll.tags);
 			if nPFCount > 0 then nBonusAC = nBonusAC + nPFMod; end
 		end
 
@@ -319,14 +309,10 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		if not bFlatFooted and not bCombatAdvantage and sDefenseStat == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat1; end
 		nBonusStat = nBonusStat + nBonusStat1;
 		local nBonusStat2 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat2, rRoll.tags);
-		if not bFlatFooted and not bCombatAdvantage and sDefenseStat2 == 'dexterity' then
-			nFlatFootedMod = nFlatFootedMod + nBonusStat2;
-		end
+		if not bFlatFooted and not bCombatAdvantage and sDefenseStat2 == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat2; end
 		nBonusStat = nBonusStat + nBonusStat2;
 		local nBonusStat3 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat3, rRoll.tags);
-		if not bFlatFooted and not bCombatAdvantage and sDefenseStat3 == 'dexterity' then
-			nFlatFootedMod = nFlatFootedMod + nBonusStat3;
-		end
+		if not bFlatFooted and not bCombatAdvantage and sDefenseStat3 == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat3; end
 		nBonusStat = nBonusStat + nBonusStat3;
 		if bFlatFooted or bCombatAdvantage then
 			-- IF NEGATIVE AND AC STAT BONUSES, THEN ONLY APPLY THE AMOUNT THAT EXCEEDS AC STAT BONUSES
@@ -519,8 +505,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		end
 	end
 
-	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) +
-					                  ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
+	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
 
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then nTouchMod = 0; end
@@ -572,9 +557,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		end
 		if EffectManager35E.hasEffect(rDefender, 'Slowed') then nBonusSituational = nBonusSituational - 1; end
 		if EffectManager35E.hasEffect(rDefender, 'Flat-footed') or EffectManager35E.hasEffect(rDefender, 'Flatfooted') or
-						EffectManager35E.hasEffect(rDefender, 'Climbing') or EffectManager35E.hasEffect(rDefender, 'Running') then
-			bCombatAdvantage = true;
-		end
+						EffectManager35E.hasEffect(rDefender, 'Climbing') or EffectManager35E.hasEffect(rDefender, 'Running') then bCombatAdvantage = true; end
 		if EffectManager35E.hasEffect(rDefender, 'Pinned') then
 			bCombatAdvantage = true;
 			if bPFMode then
@@ -671,14 +654,10 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		if not bFlatFooted and not bCombatAdvantage and sDefenseStat == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat1; end
 		nBonusStat = nBonusStat + nBonusStat1;
 		local nBonusStat2 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat2);
-		if not bFlatFooted and not bCombatAdvantage and sDefenseStat2 == 'dexterity' then
-			nFlatFootedMod = nFlatFootedMod + nBonusStat2;
-		end
+		if not bFlatFooted and not bCombatAdvantage and sDefenseStat2 == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat2; end
 		nBonusStat = nBonusStat + nBonusStat2;
 		local nBonusStat3 = ActorManager35E.getAbilityEffectsBonus(rDefender, sDefenseStat3);
-		if not bFlatFooted and not bCombatAdvantage and sDefenseStat3 == 'dexterity' then
-			nFlatFootedMod = nFlatFootedMod + nBonusStat3;
-		end
+		if not bFlatFooted and not bCombatAdvantage and sDefenseStat3 == 'dexterity' then nFlatFootedMod = nFlatFootedMod + nBonusStat3; end
 		nBonusStat = nBonusStat + nBonusStat3;
 		if bFlatFooted or bCombatAdvantage then
 			-- IF NEGATIVE AND AC STAT BONUSES, THEN ONLY APPLY THE AMOUNT THAT EXCEEDS AC STAT BONUSES
