@@ -97,7 +97,7 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		end
 	end
 
-	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
+	local nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
 
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then nTouchMod = 0; end
@@ -505,7 +505,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		end
 	end
 
-	nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
+	local nDefenseStatMod = ActorManager35E.getAbilityBonus(rDefender, sDefenseStat) + ActorManager35E.getAbilityBonus(rDefender, sDefenseStat2);
 
 	-- MAKE SURE FLAT-FOOTED AND TOUCH ADJUSTMENTS ARE POSITIVE
 	if nTouchMod < 0 then nTouchMod = 0; end
