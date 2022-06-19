@@ -1,6 +1,7 @@
 --
 -- Please see the LICENSE.md file included with this distribution for attribution and copyright information.
 --
+-- luacheck: globals ActorManager35E.hasSpecialAbility
 local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ignore
 	-- VALIDATE
 	if not rDefender or not rRoll then return nil, 0, 0, 0; end
@@ -119,7 +120,6 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 		local nBonusAC = 0;
 		-- KEL ACCC
 		local nBonusACCC = 0;
-		local nBonusStat = 0;
 		local nBonusSituational = 0;
 
 		local bPFMode = DataCommon.isPFRPG();
@@ -372,12 +372,12 @@ local function getDefenseValue_kel(rAttacker, rDefender, rRoll) -- luacheck: ign
 
 		if aVConcealCount > 0 then for _, v in pairs(aVConcealEffect) do nMissChance = math.max(v.mod, nMissChance); end end
 		-- END variable concealment but check that CONC and TCONC etc. do not overwrite VCONC and only maximum value is taken
-		if not (nMissChance >= 50) then
+		if nMissChance < 50 then
 			local aConceal = EffectManager35E.getEffectsByType(rDefender, 'TCONC', aAttackFilter, rAttacker, false, rRoll.tags);
 			if #aConceal > 0 or EffectManager35E.hasEffect(rDefender, 'TCONC', rAttacker, false, false, rRoll.tags) or bTotalConceal or
 							bAttackerBlinded then
 				nMissChance = 50;
-			elseif not (nMissChance >= 20) then
+			elseif nMissChance < 20 then
 				aConceal = EffectManager35E.getEffectsByType(rDefender, 'CONC', aAttackFilter, rAttacker, false, rRoll.tags);
 				if #aConceal > 0 or EffectManager35E.hasEffect(rDefender, 'CONC', rAttacker, false, false, rRoll.tags) or bConceal then
 					nMissChance = 20;
@@ -432,6 +432,7 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 	local bConceal = string.match(sAttack, '%[CONCEAL%]');
 	local bTotalConceal = string.match(sAttack, '%[TOTAL CONC%]');
 	local bAttackerBlinded = string.match(sAttack, '%[BLINDED%]');
+	local bIncorporealAttack = false;
 
 	-- Determine the defense database node name
 	local nDefense = 10;
@@ -523,7 +524,6 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 		local bCombatAdvantage = false;
 		local bZeroAbility = false;
 		local nBonusAC = 0;
-		local nBonusStat = 0;
 		local nBonusSituational = 0;
 
 		local bPFMode = DataCommon.isPFRPG();
@@ -720,7 +720,6 @@ local function getDefenseValue_new(rAttacker, rDefender, rRoll)
 
 		-- CHECK INCORPOREALITY
 		if not bPFMode then
-			local bIncorporealAttack = false;
 			if string.match(sAttack, '%[INCORPOREAL%]') then bIncorporealAttack = true; end
 			local bIncorporealDefender = EffectManager35E.hasEffect(rDefender, 'Incorporeal', rAttacker);
 
@@ -747,7 +746,7 @@ end
 
 -- Function Overrides
 function onInit()
-	if CombatManagerKel then
+	if CombatManagerKel then -- luacheck: globals CombatManagerKel
 		ActorManager35E.getDefenseValue = getDefenseValue_kel;
 	else
 		ActorManager35E.getDefenseValue = getDefenseValue_new;
