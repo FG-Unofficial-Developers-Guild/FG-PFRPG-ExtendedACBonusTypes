@@ -10,6 +10,9 @@
 		<ruleset>
 			<name>PFRPG</name>
 		</ruleset>
+		<ruleset>
+			<name>3.5E</name>
+		</ruleset>
 	</properties>
 
 	<announcement text="https://www.fantasygrounds.com/forums/showthread.php?68129-Extended-Natural-and-Armor-AC-Bonus-Types-Extension\rExtended AC Bonus Types v1.2\rThis extension adds naturalsize, armorenhancement, shieldenhancement, and naturalenhancement AC bonus types." font="emotefont" />
